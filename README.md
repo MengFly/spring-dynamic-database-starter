@@ -47,3 +47,20 @@ spring:
         password: passwordOfds1
         driver-class-name: driveOfds1
 ```
+
+### 2. Usage On Code
+
+```java
+
+DynamicDataSourceHelper.setDataSource("ds0");
+// JPA
+System.out.println("jpa ds0 count: "+repository.count());
+// Mybatis
+System.out.println("mybatis ds0 count: "+mapper.count());
+
+// 切换数据源
+DynamicDataSourceHelper.setDataSource("ds1");
+System.out.println("jpa ds1 count: "+repository.count());
+System.out.println("mybatis ds1 count: "+mapper.count());
+
+```
