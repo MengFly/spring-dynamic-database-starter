@@ -48,19 +48,81 @@ spring:
         driver-class-name: driveOfds1
 ```
 
-### 2. Usage On Code
+### 3. Usage On Code
 
 ```java
 
 DynamicDataSourceHelper.setDataSource("ds0");
 // JPA
-System.out.println("jpa ds0 count: "+repository.count());
+        System.out.println("jpa ds0 count: "+repository.count());
 // Mybatis
-System.out.println("mybatis ds0 count: "+mapper.count());
+        System.out.println("mybatis ds0 count: "+mapper.count());
 
 // 切换数据源
-DynamicDataSourceHelper.setDataSource("ds1");
-System.out.println("jpa ds1 count: "+repository.count());
-System.out.println("mybatis ds1 count: "+mapper.count());
+        DynamicDataSourceHelper.setDataSource("ds1");
+        System.out.println("jpa ds1 count: "+repository.count());
+        System.out.println("mybatis ds1 count: "+mapper.count());
 
+```
+
+### 4. 程序运行时自动执行sql文件
+> 数据库脚本自动执行功能支持两种不同的方式，和SpringBoot jdbc starter类似，一种通过配置文件方式配置
+> 另外一种通过代码返回DynamicDataSourceInitializer的方式手动编写代码完成。  
+> 示例如下：
+
+1. 配置文件方式
+
+```yaml
+spring:
+  datasource:
+    # 开启执行脚本功能
+    enable-script: true
+    # 数据表脚本
+    schema: classpath:schema.sql
+    # 数据脚本
+    data: classpath:data.sql
+    # Other config ......
+    targets:
+      - id: ds1
+        # other config .....
+        schema: classpath:schemaOfds1.sql
+        data: classpath:dataOfDs1.sql
+```
+
+2. 代码方式
+
+```java
+
+@Configuration
+public class DynamicDbConfig {
+
+    @Autowired
+    private DynamicDataSource dataSource;
+
+    @Bean
+    public DynamicDataSourceInitializer initializer() {
+        DynamicDataSourceInitializer initializer = new DynamicDataSourceInitializer();
+        initializer.setDataSource(dataSource);
+
+        // 主数据库
+        ResourceDatabasePopulator indexPopulator = new ResourceDatabasePopulator();
+        indexPopulator.addScripts(
+                // Schema
+                new ClassPathResource("db/data-index.sql"),
+                // data
+                new ClassPathResource("db/schema-index.sql")
+        );
+        initializer.setDatabaseInitializer(DynamicDataSourceHelper.DEFAULT_DATASOURCE_NAME, indexPopulator);
+
+        // targets 数据库
+        ResourceDatabasePopulator ptPopulator = new ResourceDatabasePopulator();
+        ptPopulator.addScripts(
+                // Schema
+                new ClassPathResource("db/schema-pt.sql")
+        );
+        initializer.setDatabaseInitializer("ds1", ptPopulator);
+
+        return initializer;
+    }
+}
 ```

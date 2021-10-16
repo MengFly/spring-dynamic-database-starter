@@ -13,7 +13,7 @@
 
     <groupId>io.github.mengfly</groupId>
     <artifactId>spring-dynamic-database-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>dynamic-database</name>
     <description>dynamic change datasource framework with springBoot</description>
     <url>https://github.com/MengFly/spring-dynamic-database-starter</url>
