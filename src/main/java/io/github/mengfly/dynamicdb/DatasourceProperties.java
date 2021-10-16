@@ -20,6 +20,8 @@ public class DatasourceProperties {
     private String password;
     private String type;
     private String driverClassName;
+    private String schema;
+    private String data;
 
     public String getId() {
         return id;
@@ -67,6 +69,23 @@ public class DatasourceProperties {
 
     public void setDriverClassName(String driverClassName) {
         this.driverClassName = driverClassName;
+    }
+
+
+    public String getSchema() {
+        return schema;
+    }
+
+    public void setSchema(String schema) {
+        this.schema = schema;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     @SuppressWarnings("unchecked")

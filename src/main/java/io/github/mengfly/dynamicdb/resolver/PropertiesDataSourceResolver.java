@@ -1,6 +1,8 @@
 package io.github.mengfly.dynamicdb.resolver;
 
 import io.github.mengfly.dynamicdb.DatasourceProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.PropertyValues;
 import org.springframework.boot.context.properties.bind.Bindable;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.DataBinder;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,9 @@ import java.util.Map;
  */
 @Component
 public class PropertiesDataSourceResolver implements DynamicDataSourceResolver, EnvironmentAware {
+
+    private static final Log logger = LogFactory.getLog(PropertiesDataSourceResolver.class);
+
     private static final String PROPERTIES_DATASOURCE_TARGETS = "spring.datasource.targets";
     private static final String PROPERTIES_DATASOURCE_CONFIG = "spring.datasource";
     private static final String[] IGNORE_DATASOURCE_PROPERTIES = {
@@ -55,7 +61,10 @@ public class PropertiesDataSourceResolver implements DynamicDataSourceResolver, 
         Bindable<List<DatasourceProperties>> targetProperties = Bindable.listOf(DatasourceProperties.class);
         List<DatasourceProperties> datasourceProperties = binder.bind(PROPERTIES_DATASOURCE_TARGETS, targetProperties).get();
         if (datasourceProperties.isEmpty()) {
-            throw new IllegalStateException("Dynamic database can't found any database config, please put datasource list config at spring.datasource.targets");
+            logger.warn("Dynamic database can't found any targets database config, " +
+                    "If your project just have one datasource, It's not recommend to use this framework, " +
+                    "If not, please put datasource list config at spring.datasource.targets");
+            return Collections.emptyMap();
         }
         Map<Object, Object> targetDatasourceMap = new LinkedHashMap<>();
         for (DatasourceProperties datasourceProperty : datasourceProperties) {

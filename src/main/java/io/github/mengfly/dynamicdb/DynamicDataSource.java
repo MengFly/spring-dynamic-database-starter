@@ -1,8 +1,6 @@
 package io.github.mengfly.dynamicdb;
 
 import io.github.mengfly.dynamicdb.resolver.DynamicDataSourceResolver;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.stereotype.Component;
 
