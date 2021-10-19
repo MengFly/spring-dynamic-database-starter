@@ -59,7 +59,8 @@ public class PropertiesDataSourceResolver implements DynamicDataSourceResolver, 
     public Map<Object, Object> loadDataSource() throws Exception {
         datasourceConfiguration = readDatasourceConfiguration();
         Bindable<List<DatasourceProperties>> targetProperties = Bindable.listOf(DatasourceProperties.class);
-        List<DatasourceProperties> datasourceProperties = binder.bind(PROPERTIES_DATASOURCE_TARGETS, targetProperties).get();
+        List<DatasourceProperties> datasourceProperties =
+                binder.bind(PROPERTIES_DATASOURCE_TARGETS, targetProperties).orElse(Collections.emptyList());
         if (datasourceProperties.isEmpty()) {
             logger.warn("Dynamic database can't found any targets database config, " +
                     "If your project just have one datasource, It's not recommend to use this framework, " +

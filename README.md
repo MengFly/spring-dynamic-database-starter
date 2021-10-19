@@ -11,7 +11,7 @@
 <dependency>
     <groupId>io.github.mengfly</groupId>
     <artifactId>spring-dynamic-database-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 
@@ -78,9 +78,9 @@ spring:
     # 开启执行脚本功能
     enable-script: true
     # 数据表脚本
-    schema: classpath:schema.sql
+    script-schema: classpath:schema.sql
     # 数据脚本
-    data: classpath:data.sql
+    script-data: classpath:data.sql
     # Other config ......
     targets:
       - id: ds1
