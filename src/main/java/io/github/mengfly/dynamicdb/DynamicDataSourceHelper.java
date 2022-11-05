@@ -23,4 +23,8 @@ public class DynamicDataSourceHelper {
     public static String dataSourceKey() {
         return DATA_SOURCE_KEY.get();
     }
+
+    public static boolean containsDataSource(String datasource) {
+        return DynamicDataSource.DATA_SOURCE_MAP.containsKey(datasource);
+    }
 }

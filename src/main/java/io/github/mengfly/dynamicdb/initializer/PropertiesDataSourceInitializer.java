@@ -26,9 +26,9 @@ public class PropertiesDataSourceInitializer implements InitializingBean, Dispos
     private static final String SCRIPT_MAIN_DATA_SOURCE_SCHEMA = "spring.datasource.script-schema";
     private static final String SCRIPT_MAIN_DATA_SOURCE_DATA = "spring.datasource.script-data";
     private static final String TARGET_DATA_SOURCE = "spring.datasource.targets";
-    private static final String SCRIPT_ENCODING_DATA_SOURCE = "spring.datasource.script-encoding";
     private final ResourceLoader resourceLoader = new DefaultResourceLoader();
     private String encoding;
+    private Boolean skipError;
 
     @Override
     public void destroy() throws Exception {
@@ -49,7 +49,7 @@ public class PropertiesDataSourceInitializer implements InitializingBean, Dispos
         // 加载主数据源信息
         String mainDsSchemaScript = binder.bind(SCRIPT_MAIN_DATA_SOURCE_SCHEMA, String.class).orElse(null);
         String mainDsDataScript = binder.bind(SCRIPT_MAIN_DATA_SOURCE_DATA, String.class).orElse(null);
-        encoding = binder.bind(SCRIPT_ENCODING_DATA_SOURCE, String.class).orElse(null);
+
         bindDataSourcePopulator(DynamicDataSourceHelper.DEFAULT_DATASOURCE_NAME, mainDsSchemaScript, mainDsDataScript);
 
         Bindable<List<DatasourceProperties>> bindable = Bindable.listOf(DatasourceProperties.class);
@@ -73,6 +73,7 @@ public class PropertiesDataSourceInitializer implements InitializingBean, Dispos
             if (dataScript != null) {
                 populator.addScript(resourceLoader.getResource(dataScript));
             }
+            populator.setContinueOnError(skipError);
             initializer.setDatabaseInitializer(dataSourceId, populator);
         }
     }
@@ -80,5 +81,14 @@ public class PropertiesDataSourceInitializer implements InitializingBean, Dispos
     @Override
     public void setEnvironment(Environment environment) {
         this.binder = Binder.get(environment);
+        bindingScriptConfig();
+    }
+
+    private static final String SCRIPT_ENCODING_DATA_SOURCE = "spring.datasource.script-encoding";
+    private static final String SCRIPT_SKIP_ERROR = "spring.datasource.script-skip-error";
+
+    private void bindingScriptConfig() {
+        encoding = binder.bind(SCRIPT_ENCODING_DATA_SOURCE, String.class).orElse(null);
+        skipError = binder.bind(SCRIPT_SKIP_ERROR, Boolean.class).orElse(true);
     }
 }

@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
-    private final Map<Object, Object> DATA_SOURCE_MAP = new ConcurrentHashMap<>(10);
+    static final Map<Object, Object> DATA_SOURCE_MAP = new ConcurrentHashMap<>(10);
 
     public DynamicDataSource(DynamicDataSourceResolver resolver) throws Exception{
         DATA_SOURCE_MAP.putAll(resolver.loadDataSource());
