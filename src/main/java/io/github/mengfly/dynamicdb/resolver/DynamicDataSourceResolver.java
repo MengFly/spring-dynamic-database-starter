@@ -29,7 +29,7 @@ public interface DynamicDataSourceResolver {
     /**
      * 该方法会在 {@link #loadDataSource()} 后被调用，用于设置默认的数据源
      * <p>
-     * 该数据源会默认赋予一个数据源Id {@link io.github.mengfly.dynamicdb.DynamicDataSourceHelper#DEFAULT_DATASOURCE_NAME}
+     * 该数据源会默认赋予一个数据源Id
      * 所以在实现上面的 loadDataSource 方法时要注意不要和该数据源Id重复
      *
      * @return 默认的数据源

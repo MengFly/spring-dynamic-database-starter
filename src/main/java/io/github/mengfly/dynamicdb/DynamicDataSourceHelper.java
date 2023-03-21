@@ -6,11 +6,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  * @author Mengfly
  */
 public class DynamicDataSourceHelper {
-
-    /**
-     * 默认数据源Id
-     */
-    public static final String DEFAULT_DATASOURCE_NAME = "defaultDataSource";
+    
 
     /**
      * 使用Alibaba的 TransmittableThreadLocal 解决数据源切换的父子线程之间数据传递的问题
@@ -22,15 +18,11 @@ public class DynamicDataSourceHelper {
     }
 
     public static void defaultDataSource() {
-        setDataSource(DEFAULT_DATASOURCE_NAME);
+        DATA_SOURCE_KEY.remove();
     }
 
     public static String dataSourceKey() {
-        String dataSourceKey = DATA_SOURCE_KEY.get();
-        if (dataSourceKey == null) {
-            return DEFAULT_DATASOURCE_NAME;
-        }
-        return dataSourceKey;
+        return DATA_SOURCE_KEY.get();
     }
 
     public static boolean containsDataSource(String datasource) {

@@ -2,7 +2,6 @@ package io.github.mengfly.dynamicdb.initializer;
 
 import io.github.mengfly.dynamicdb.DatasourceProperties;
 import io.github.mengfly.dynamicdb.DynamicDataSource;
-import io.github.mengfly.dynamicdb.DynamicDataSourceHelper;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.bind.Bindable;
@@ -50,7 +49,7 @@ public class PropertiesDataSourceInitializer implements InitializingBean, Dispos
         String mainDsSchemaScript = binder.bind(SCRIPT_MAIN_DATA_SOURCE_SCHEMA, String.class).orElse(null);
         String mainDsDataScript = binder.bind(SCRIPT_MAIN_DATA_SOURCE_DATA, String.class).orElse(null);
 
-        bindDataSourcePopulator(DynamicDataSourceHelper.DEFAULT_DATASOURCE_NAME, mainDsSchemaScript, mainDsDataScript);
+        bindDataSourcePopulator(null, mainDsSchemaScript, mainDsDataScript);
 
         Bindable<List<DatasourceProperties>> bindable = Bindable.listOf(DatasourceProperties.class);
         List<DatasourceProperties> datasourceProperties = binder.bind(TARGET_DATA_SOURCE, bindable).orElse(Collections.emptyList());
